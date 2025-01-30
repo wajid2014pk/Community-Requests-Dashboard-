@@ -14,100 +14,102 @@ class _CommunityRequestsScreenState extends State<CommunityRequestsScreen> {
   final CommunityRequestsController controller = Get.put(CommunityRequestsController());
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Obx(() {
-        return ListView.builder(
-          padding: const EdgeInsets.all(16),
-          itemCount: controller.requests.length,
-          itemBuilder: (context, index) {
-            final status = controller.requestStatus[index];
-            return Container(
-              margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(15),
-                color: status == "approved"
-                    ? Colors.green.shade100
-                    : status == "rejected"
-                        ? Colors.grey.shade100
-                        : UiColors.backgroundColor,
-                border: Border.all(
-                  width: 2.0,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: Obx(() {
+          return ListView.builder(
+            padding: const EdgeInsets.all(16),
+            itemCount: controller.requests.length,
+            itemBuilder: (context, index) {
+              final status = controller.requestStatus[index];
+              return Container(
+                margin: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(15),
                   color: status == "approved"
-                      ? Colors.green.shade300
+                      ? Colors.green.shade100
                       : status == "rejected"
-                          ? Colors.grey.shade400
-                          : UiColors.borderColor,
-                ),
-              ),
-              child: Row(
-                children: [
-                  // Profile Image
-                  Image.asset(
-                    'assets/images/profile_icon.png',
-                    height: 50,
-                    width: 50,
-                    fit: BoxFit.cover,
+                          ? Colors.grey.shade100
+                          : UiColors.backgroundColor,
+                  border: Border.all(
+                    width: 2.0,
+                    color: status == "approved"
+                        ? Colors.green.shade300
+                        : status == "rejected"
+                            ? Colors.grey.shade400
+                            : UiColors.borderColor,
                   ),
-                  const SizedBox(width: 13),
-
-                  // Scrollable Information Columns
-                  Expanded(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          infoColumn(
-                            label: controller.requests[index]['name']!,
-                            tag: "NAME",
-                          ),
-                          infoColumn(
-                            label: controller.requests[index]['email']!,
-                            tag: "E-MAIL",
-                          ),
-                          infoColumn(
-                            label: controller.requests[index]['role']!,
-                            tag: "ROLE",
-                          ),
-                        ],
+                ),
+                child: Row(
+                  children: [
+                    // Profile Image
+                    Image.asset(
+                      'assets/images/profile_icon.png',
+                      height: 50,
+                      width: 50,
+                      fit: BoxFit.cover,
+                    ),
+                    const SizedBox(width: 13),
+      
+                    // Scrollable Information Columns
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            infoColumn(
+                              label: controller.requests[index]['name']!,
+                              tag: "NAME",
+                            ),
+                            infoColumn(
+                              label: controller.requests[index]['email']!,
+                              tag: "E-MAIL",
+                            ),
+                            infoColumn(
+                              label: controller.requests[index]['role']!,
+                              tag: "ROLE",
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-
-                  // Approve/Reject Buttons or Status
-                  if (status == null) ...[
-                    // Approve Button
-                    approveRejectButton(
-                      'assets/images/Tick Square.png',
-                      () {
-                        controller.approveRequest(index);
-                        setState(() {});
-                      },
-                    ),
-                    const SizedBox(width: 10),
-                    // Reject Button
-                    approveRejectButton(
-                      'assets/images/Close Square.png',
-                      () {
-                        controller.rejectRequest(index);
-                        setState(() {});
-                      },
-                    ),
-                  ] else if (status == "approved") ...[
-                    // Approved Status
-                    actionStatus("Community membership was added successfully"),
-                  ] else if (status == "rejected") ...[
-                    // Rejected Status
-                    actionStatus("Community membership was declined"),
+      
+                    // Approve/Reject Buttons or Status
+                    if (status == null) ...[
+                      // Approve Button
+                      approveRejectButton(
+                        'assets/images/Tick Square.png',
+                        () {
+                          controller.approveRequest(index);
+                          setState(() {});
+                        },
+                      ),
+                      const SizedBox(width: 10),
+                      // Reject Button
+                      approveRejectButton(
+                        'assets/images/Close Square.png',
+                        () {
+                          controller.rejectRequest(index);
+                          setState(() {});
+                        },
+                      ),
+                    ] else if (status == "approved") ...[
+                      // Approved Status
+                      actionStatus("Community membership was added successfully"),
+                    ] else if (status == "rejected") ...[
+                      // Rejected Status
+                      actionStatus("Community membership was declined"),
+                    ],
                   ],
-                ],
-              ),
-            );
-          },
-        );
-      }),
+                ),
+              );
+            },
+          );
+        }),
+      ),
     );
   }
 
@@ -128,7 +130,7 @@ class _CommunityRequestsScreenState extends State<CommunityRequestsScreen> {
       child: Row(
         children: [
           SizedBox(
-            width: 200,
+            width: Get.width/6,
             child: Text(
               status,
               maxLines: 2,
